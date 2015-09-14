@@ -1,0 +1,20 @@
+[package]
+
+name = "rustd"
+version = "0.0.1"
+authors = ["caiges <coreywkruger@gmail.com>"]
+
+[lib]
+name = "rustd"
+path = "src/lib.rs"
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+[dependencies.sdl2]
+git = "https://github.com/AngryLawyer/rust-sdl2"
+
+[dependencies]
+time = "*"
+num = "*"
