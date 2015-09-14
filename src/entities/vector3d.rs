@@ -80,27 +80,21 @@ impl Vector3d {
 		self.z = z;
 	}
 
-	pub fn get_x_axis(vec: &Vector3d) -> Vector3d {
+	pub fn get_x_axis(euler: &Vector3d) -> Vector3d {
 		let mut rotated = Vector3d::new(1.0, 0.0, 0.0);
-		rotated.rotate_x(vec.x);
-		rotated.rotate_y(vec.y);
-		rotated.rotate_z(vec.z);
+		rotated.rotate_x(euler.x);
 		rotated
 	}
 
-	pub fn get_y_axis(vec: &Vector3d) -> Vector3d {
+	pub fn get_y_axis(euler: &Vector3d) -> Vector3d {
 		let mut rotated = Vector3d::new(0.0, 1.0, 0.0);
-		rotated.rotate_x(vec.x);
-		rotated.rotate_y(vec.y);
-		rotated.rotate_z(vec.z);
+		rotated.rotate_y(euler.y);
 		rotated
 	}
 
-	pub fn get_z_axis(vec: &Vector3d) -> Vector3d {
+	pub fn get_z_axis(euler: &Vector3d) -> Vector3d {
 		let mut rotated = Vector3d::new(0.0, 0.0, 1.0);
-		rotated.rotate_x(vec.x);
-		rotated.rotate_y(vec.y);
-		rotated.rotate_z(vec.z);
+		rotated.rotate_z(euler.z);
 		rotated
 	}
 
@@ -134,14 +128,14 @@ impl Vector3d {
 	pub fn rotate_on_axis(&mut self, axis: &Vector3d, angle: f64) {
 
 		let mut projection = Vector3d::new(axis.x, axis.y, axis.z);
-		let dot = self.dot(&axis);// axis.x, axis.y, axis.z);
+		let dot = self.dot(&axis);
 		projection.set_length(dot);
 
 		let mut diff = Vector3d::new(self.x - projection.x, self.y - projection.y, self.z - projection.z);
 		let mut green = self.cross(&axis).normalize();
 		let cross = green.cross(&axis);
 		self.copy(&cross);
-		
+
 		green.set_length(diff.get_length() * angle.sin());
 		self.set_length(diff.get_length() * angle.cos());
 		self.add(&green);
@@ -171,10 +165,11 @@ impl Vector3d {
 	}
 
 	pub fn rotate_y(&mut self, angle: f64) {
+		println!("Y -----> {} {} {}", self.x, self.y, self.z);
 		let hyp = (self.x * self.x + self.z * self.z).sqrt();
 		let mut phi: f64 = 0.0;
 		if hyp != 0.0 {
-			phi = (self.z.abs() / hyp).asin(); // quadrant 1
+			phi = (self.z / hyp).asin(); // quadrant 1
 		}
 		if self.x < 0.0 && self.z > 0.0 { // quadrant 2
 			phi += 1.0 * consts::PI / 2.0;
@@ -183,6 +178,12 @@ impl Vector3d {
 		} else if self.x > 0.0 && self.z < 0.0 { // quadrant 4
 			phi += 3.0 * consts::PI / 2.0;
 		}
+
+		let mut resized: f64 = angle;
+		if angle > consts::PI * 2.0 {
+			resized = angle - consts::PI * 2.0;
+		} 
+		// println!("||||| {:?}", resized);
 		let new_x = (phi + angle).cos() * hyp;
 		let new_z = (phi + angle).sin() * hyp;
 

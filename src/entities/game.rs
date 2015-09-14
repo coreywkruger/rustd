@@ -39,15 +39,12 @@ impl Game {
 
         let screen = Screen::new(width, height);
         let mut cube = Mesh::new(Geometry::new_cube_geometry());
-        // cube.rotation.set_z(consts::PI / 18.0);
         cube.position.set_z(39.0);
-        cube.position.set_x(-11.0);
+        // cube.position.set_x(-11.0);
 
         let mut cube2 = Mesh::new(Geometry::new_cube_geometry());
-        // cube.rotation.set_z(consts::PI / 18.0);
         cube2.position.set_z(39.0);
         cube2.position.set_x(11.0);
-        // cube2.position.set_y(-11.0);
 
 
         // let mut plane = Mesh::new(Geometry::new_plane_geometry(10, 16.0));
@@ -60,7 +57,7 @@ impl Game {
         // cube.position.set_y(6.0);
         let mut scene = Scene::new();
         scene.add_object(cube);
-        scene.add_object(cube2);
+        // scene.add_object(cube2);
         // scene.add_object(plane);
 
         let fov = 0.8 * (consts::PI / 4.0);
@@ -129,12 +126,14 @@ impl Game {
             // Rotation stuff happens here...
             self.scene.objects[0].rotation.x = 
                 self.scene.objects[0].rotation.x + 0.012;
-            // self.scene.objects[0].rotation.y = 
-            //     self.scene.objects[0].rotation.y + 0.012;
+            self.scene.objects[0].rotation.y = 
+                self.scene.objects[0].rotation.y + 0.012;
+            // self.scene.objects[0].rotation.z = 
+                // self.scene.objects[0].rotation.z + 0.012;
 
 
-            self.scene.objects[1].rotation.x = 
-                self.scene.objects[1].rotation.x + 0.01;
+            // self.scene.objects[1].rotation.x = 
+            //     self.scene.objects[1].rotation.x + 0.01;
             // self.scene.objects[1].rotation.y = 
             //     self.scene.objects[1].rotation.y + 0.015;
         }
@@ -160,7 +159,7 @@ impl Game {
                 let b = &ob.geometry.vertices[face.b];
                 let c = &ob.geometry.vertices[face.c];
 
-                // println!("==== {} {} {}", a.x, b.x, c.x);
+                
 
                 let mut p1 = Vector3d::new(a.x, a.y, a.z);
                 let mut p2 = Vector3d::new(b.x, b.y, b.z);
@@ -168,7 +167,9 @@ impl Game {
 
                 let x_axis = Vector3d::get_x_axis(&ob.rotation);
                 let y_axis = Vector3d::get_y_axis(&ob.rotation);
-                let z_axis = Vector3d::get_y_axis(&ob.rotation);
+                let z_axis = Vector3d::get_z_axis(&ob.rotation);
+
+                println!("==== {} {} {}", y_axis.x, y_axis.y, y_axis.z);
 
                 p1.rotate_on_axis(&x_axis, ob.rotation.x);
                 p1.rotate_on_axis(&y_axis, ob.rotation.y);
