@@ -4,6 +4,7 @@ use super::geometry::Geometry;
 pub struct Mesh {
 	pub position: Vector3d,
 	pub rotation: Vector3d,
+	pub scale: Vector3d,
 	pub geometry: Geometry
 }
 
@@ -12,6 +13,7 @@ impl Mesh {
 		Mesh{
 			position: Vector3d::new(0.0, 0.0, 0.0),
 			rotation: Vector3d::new(0.0, 0.0, 0.0),
+			scale: Vector3d::new(1.0, 1.0, 1.0),
 			geometry: geo
 		}
 	}

@@ -7,4 +7,5 @@ pub mod vector2d;
 pub mod face;
 pub mod mesh;
 pub mod geometry;
+pub mod importer;
 pub mod scene;

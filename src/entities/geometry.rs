@@ -3,16 +3,16 @@ use super::face::Face;
 
 pub struct Geometry{
 	pub vertices: Vec<Vector3d>,
-	pub edges: Vec<[usize; 2]>,
+	// pub edges: Vec<[usize; 2]>,
 	pub faces: Vec<Face>
 }
 
 impl Geometry {
-	pub fn new(verts: Vec<Vector3d>, edges: Vec<[usize; 2]>, faces: Vec<Face>) -> Geometry {
+	pub fn new(verts: Vec<Vector3d>, /*edges: Vec<[usize; 2]>,*/ faces: Vec<Face>) -> Geometry {
 
 		Geometry{
 			vertices: verts,
-			edges: edges,
+			// edges: edges,
 			faces: faces
 		}
 	}
@@ -30,22 +30,22 @@ impl Geometry {
 		vecs.push(Vector3d::new(-5.0, -5.0, -5.0)); // 6
 		vecs.push(Vector3d::new(5.0, -5.0, -5.0)); // 7
 
-		let mut edges = vec![];
+		// let mut edges = vec![];
 
-		edges.push([0, 1]);
-		edges.push([1, 2]);
-		edges.push([2, 3]);
-		edges.push([3, 0]);
+		// edges.push([0, 1]);
+		// edges.push([1, 2]);
+		// edges.push([2, 3]);
+		// edges.push([3, 0]);
 
-		edges.push([0, 4]);
-		edges.push([1, 5]);
-		edges.push([2, 6]);
-		edges.push([3, 7]);
+		// edges.push([0, 4]);
+		// edges.push([1, 5]);
+		// edges.push([2, 6]);
+		// edges.push([3, 7]);
 
-		edges.push([4, 5]);
-		edges.push([5, 6]);
-		edges.push([6, 7]);
-		edges.push([7, 4]);
+		// edges.push([4, 5]);
+		// edges.push([5, 6]);
+		// edges.push([6, 7]);
+		// edges.push([7, 4]);
 
 		let mut faces = vec![];
 
@@ -73,7 +73,15 @@ impl Geometry {
 		faces.push(Face::new(4, 5, 6));
 		faces.push(Face::new(4, 6, 7));
 
-		return Geometry::new(vecs, edges, faces);
+		return Geometry::new(vecs, faces);
+	}
+
+	pub fn add_vertex(&mut self, vertex: Vector3d) {
+		self.vertices.push(vertex);
+	}
+
+	pub fn add_face(&mut self, face: Face) {
+		self.faces.push(face);
 	}
 
 	// pub fn new_plane_geometry(segments: i32, width: f64) -> Geometry {

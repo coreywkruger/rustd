@@ -52,6 +52,12 @@ impl Vector3d {
 		self.z += vec.z;
 	}
 
+	pub fn multiply(&mut self, vec: &Vector3d) {
+		self.x *= vec.x;
+		self.y *= vec.y;
+		self.z *= vec.z;
+	}
+
 	pub fn sub(&mut self, vec: Vector3d) {
 		self.x -= vec.x;
 		self.y -= vec.y;
@@ -165,7 +171,6 @@ impl Vector3d {
 	}
 
 	pub fn rotate_y(&mut self, angle: f64) {
-		println!("Y -----> {} {} {}", self.x, self.y, self.z);
 		let hyp = (self.x * self.x + self.z * self.z).sqrt();
 		let mut phi: f64 = 0.0;
 		if hyp != 0.0 {
@@ -179,10 +184,10 @@ impl Vector3d {
 			phi += 3.0 * consts::PI / 2.0;
 		}
 
-		let mut resized: f64 = angle;
-		if angle > consts::PI * 2.0 {
-			resized = angle - consts::PI * 2.0;
-		} 
+		// let resized: f64 = angle;
+		// if angle > consts::PI * 2.0 {
+		// 	resized = angle - consts::PI * 2.0;
+		// } 
 		// println!("||||| {:?}", resized);
 		let new_x = (phi + angle).cos() * hyp;
 		let new_z = (phi + angle).sin() * hyp;

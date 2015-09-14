@@ -5,10 +5,11 @@ use super::keymap::KeyPressMap;
 use super::screen::Screen;
 use super::camera::Camera;
 use super::vector3d::Vector3d;
-use super::vector2d::Vector2d;
+// use super::vector2d::Vector2d;
 use super::mesh::Mesh;
 use super::geometry::Geometry;
 use super::scene::Scene;
+use super::importer::Importer;
 
 use self::sdl2::rect::Point;
 use self::sdl2::sdl::Sdl;
@@ -46,7 +47,9 @@ impl Game {
         cube2.position.set_z(39.0);
         cube2.position.set_x(11.0);
 
-
+        // let mut twisty = Importer::import_obj("./twisty_torus.obj");
+        // twisty.scale.set(0.5, 0.5, 0.5);
+        // twisty.position.set_z(100.0);
         // let mut plane = Mesh::new(Geometry::new_plane_geometry(10, 16.0));
         // plane.rotation.set_x(consts::PI / 2.0);
         // plane.position.set_z(50.0);
@@ -56,6 +59,8 @@ impl Game {
 
         // cube.position.set_y(6.0);
         let mut scene = Scene::new();
+        
+        // scene.add_object(twisty);
         scene.add_object(cube);
         // scene.add_object(cube2);
         // scene.add_object(plane);
@@ -131,6 +136,7 @@ impl Game {
             // self.scene.objects[0].rotation.z = 
                 // self.scene.objects[0].rotation.z + 0.012;
 
+            // self.scene.objects[0].scale.z -= 0.001; 
 
             // self.scene.objects[1].rotation.x = 
             //     self.scene.objects[1].rotation.x + 0.01;
@@ -155,7 +161,7 @@ impl Game {
             
             let faces = &mut ob.geometry.faces;
             for face in faces {
-                
+
                 let a = &ob.geometry.vertices[face.a];
                 let b = &ob.geometry.vertices[face.b];
                 let c = &ob.geometry.vertices[face.c];
@@ -184,22 +190,34 @@ impl Game {
                 p2.add(&ob.position);
                 p3.add(&ob.position);
 
+                p1.multiply(&ob.scale);
+                p2.multiply(&ob.scale);
+                p3.multiply(&ob.scale);
+
                 let width = self.screen.width as f64;
                 let height = self.screen.height as f64;
 
-                let pixel_1 = &mut self.camera.project_to_2d(p1, width as f64, height as f64);
-                let pixel_2 = &mut self.camera.project_to_2d(p2, width as f64, height as f64);
-                let pixel_3 = &mut self.camera.project_to_2d(p3, width as f64, height as f64);
+                let (pixel_1, out_of_bounds_1) = self.camera.project_to_2d(p1, width as f64, height as f64);
+                let (pixel_2, out_of_bounds_2) = self.camera.project_to_2d(p2, width as f64, height as f64);
+                let (pixel_3, out_of_bounds_3) = self.camera.project_to_2d(p3, width as f64, height as f64);
 
-                drawer.draw_line(
-                    Point::new(pixel_1.x as i32, pixel_1.y as i32), 
-                    Point::new(pixel_2.x as i32, pixel_2.y as i32));
-                drawer.draw_line(
-                    Point::new(pixel_1.x as i32, pixel_1.y as i32), 
-                    Point::new(pixel_3.x as i32, pixel_3.y as i32));
-                drawer.draw_line(
-                    Point::new(pixel_3.x as i32, pixel_3.y as i32), 
-                    Point::new(pixel_2.x as i32, pixel_2.y as i32));
+                if  !out_of_bounds_1 ||
+                    !out_of_bounds_2 ||
+                    !out_of_bounds_3 {
+
+                    // println!("{} {} {}", !out_of_bounds_1, out_of_bounds_2, out_of_bounds_3);
+                    drawer.draw_line(
+                        Point::new(pixel_1.x as i32, pixel_1.y as i32), 
+                        Point::new(pixel_2.x as i32, pixel_2.y as i32));
+                    drawer.draw_line(
+                        Point::new(pixel_1.x as i32, pixel_1.y as i32), 
+                        Point::new(pixel_3.x as i32, pixel_3.y as i32));
+                    drawer.draw_line(
+                        Point::new(pixel_3.x as i32, pixel_3.y as i32), 
+                        Point::new(pixel_2.x as i32, pixel_2.y as i32));
+                }
+
+                
 
                 // Draw a triangle from the 3 vertices
                 // gl::DrawArrays(gl::TRIANGLES, 0, 3);
