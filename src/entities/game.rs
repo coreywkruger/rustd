@@ -1,4 +1,5 @@
 extern crate sdl2;
+// extern crate sdl2;
 
 use super::keymap::KeyPressMap;
 use super::screen::Screen;
@@ -19,6 +20,9 @@ use self::sdl2::pixels::Color;
 
 use std::thread;
 use std::f64::{consts};
+
+// use gl::types::{GLfloat, GLenum, GLuint, GLint, GLchar, GLsizeiptr};
+// use gl::types::{GLboolean};
 
 pub struct Game {
     running: bool,
@@ -162,25 +166,25 @@ impl Game {
                 let mut p2 = Vector3d::new(b.x, b.y, b.z);
                 let mut p3 = Vector3d::new(c.x, c.y, c.z);
 
-                let x_axis = Vector3d::get_x_axis(ob.rotation.x, ob.rotation.y, ob.rotation.z);
-                let y_axis = Vector3d::get_y_axis(ob.rotation.x, ob.rotation.y, ob.rotation.z);
-                let z_axis = Vector3d::get_y_axis(ob.rotation.x, ob.rotation.y, ob.rotation.z);
+                let x_axis = Vector3d::get_x_axis(&ob.rotation);
+                let y_axis = Vector3d::get_y_axis(&ob.rotation);
+                let z_axis = Vector3d::get_y_axis(&ob.rotation);
 
-                p1.rotate_on_axis(x_axis.x, x_axis.y, x_axis.z, ob.rotation.x);
-                p1.rotate_on_axis(y_axis.x, y_axis.y, y_axis.z, ob.rotation.y);
-                p1.rotate_on_axis(z_axis.x, z_axis.y, z_axis.z, ob.rotation.y);
+                p1.rotate_on_axis(&x_axis, ob.rotation.x);
+                p1.rotate_on_axis(&y_axis, ob.rotation.y);
+                p1.rotate_on_axis(&z_axis, ob.rotation.z);
 
-                p2.rotate_on_axis(x_axis.x, x_axis.y, x_axis.z, ob.rotation.x);
-                p2.rotate_on_axis(y_axis.x, y_axis.y, y_axis.z, ob.rotation.y);
-                p2.rotate_on_axis(z_axis.x, z_axis.y, z_axis.z, ob.rotation.y);
+                p2.rotate_on_axis(&x_axis, ob.rotation.x);
+                p2.rotate_on_axis(&y_axis, ob.rotation.y);
+                p2.rotate_on_axis(&z_axis, ob.rotation.z);
 
-                p3.rotate_on_axis(x_axis.x, x_axis.y, x_axis.z, ob.rotation.x);
-                p3.rotate_on_axis(y_axis.x, y_axis.y, y_axis.z, ob.rotation.y);
-                p3.rotate_on_axis(z_axis.x, z_axis.y, z_axis.z, ob.rotation.y);
+                p3.rotate_on_axis(&x_axis, ob.rotation.x);
+                p3.rotate_on_axis(&y_axis, ob.rotation.y);
+                p3.rotate_on_axis(&z_axis, ob.rotation.z);
 
-                p1.add(ob.position.x, ob.position.y, ob.position.z);
-                p2.add(ob.position.x, ob.position.y, ob.position.z);
-                p3.add(ob.position.x, ob.position.y, ob.position.z);
+                p1.add(&ob.position);
+                p2.add(&ob.position);
+                p3.add(&ob.position);
 
                 let width = self.screen.width as f64;
                 let height = self.screen.height as f64;
@@ -198,6 +202,9 @@ impl Game {
                 drawer.draw_line(
                     Point::new(pixel_3.x as i32, pixel_3.y as i32), 
                     Point::new(pixel_2.x as i32, pixel_2.y as i32));
+
+                // Draw a triangle from the 3 vertices
+                // gl::DrawArrays(gl::TRIANGLES, 0, 3);
 
                 // Face stuff
                 // let mut top = Vector2d::new(0.0,0.0);
@@ -247,7 +254,7 @@ impl Game {
                 //     }
                 // }
 
-                // println!("||| {}", top.y);
+                // // println!("||| {}", top.y);
 
                 // // x * (rise / run) == y
                 // // y * (run / rise) == x
@@ -288,24 +295,24 @@ impl Game {
                 
 
                 // for y in 0..((top.y - bot.y) as i32) {
-                //     for x in 0..((right - left) as i32) {
+                    // for x in 0..((right - left) as i32) {
 
-                //         let pt = Vector2d::new((left) + (x as f64), top.y + (y as f64));
+                        // let pt = Vector2d::new((left) + (x as f64), top.y + (y as f64));
 
-                //         let s1 = Vector2d::sign(&pt, pixel_1, pixel_2);
-                //         let s2 = Vector2d::sign(&pt, pixel_2, pixel_3);
-                //         let s3 = Vector2d::sign(&pt, pixel_3, pixel_1);
+                        // let s1 = Vector2d::sign(&pt, pixel_1, pixel_2);
+                        // let s2 = Vector2d::sign(&pt, pixel_2, pixel_3);
+                        // let s3 = Vector2d::sign(&pt, pixel_3, pixel_1);
 
-                //         let b1 = s1 < 0.0;
-                //         let b2 = s2 < 0.0;
-                //         let b3 = s3 < 0.0;
+                        // let b1 = s1 < 0.0;
+                        // let b2 = s2 < 0.0;
+                        // let b3 = s3 < 0.0;
 
-                //         if (b1 == b2) && (b2 == b3) {
-                //             drawer.draw_point(Point::new(pt.x as i32, pt.y as i32))
-                //         }
+                        // if (b1 == b2) && (b2 == b3) {
+                        //     drawer.draw_point(Point::new(pt.x as i32, pt.y as i32))
+                        // }
 
-                //         // drawer.draw_points(&points[..]);
-                //     }
+                        // drawer.draw_points(&points[..]);
+                    // }
                 // }
 
                 // drawer.draw_line(

@@ -45,10 +45,11 @@ impl Vector3d {
 	// 	self.y += vec.y;
 	// 	self.z += vec.z;
 	// }
-	pub fn add(&mut self, x: f64, y: f64, z: f64) {
-		self.x += x;
-		self.y += y;
-		self.z += z;
+	// pub fn add(&mut self, x: f64, y: f64, z: f64) {
+	pub fn add(&mut self, vec: &Vector3d) {
+		self.x += vec.x;
+		self.y += vec.y;
+		self.z += vec.z;
 	}
 
 	pub fn sub(&mut self, vec: Vector3d) {
@@ -79,49 +80,39 @@ impl Vector3d {
 		self.z = z;
 	}
 
-	pub fn get_x_axis(x: f64, y: f64, z: f64) -> Vector3d {
+	pub fn get_x_axis(vec: &Vector3d) -> Vector3d {
 		let mut rotated = Vector3d::new(1.0, 0.0, 0.0);
-		rotated.rotate_x(x);
-		rotated.rotate_y(y);
-		rotated.rotate_z(z);
+		rotated.rotate_x(vec.x);
+		rotated.rotate_y(vec.y);
+		rotated.rotate_z(vec.z);
 		rotated
 	}
 
-	pub fn get_y_axis(x: f64, y: f64, z: f64) -> Vector3d {
+	pub fn get_y_axis(vec: &Vector3d) -> Vector3d {
 		let mut rotated = Vector3d::new(0.0, 1.0, 0.0);
-		rotated.rotate_x(x);
-		rotated.rotate_y(y);
-		rotated.rotate_z(z);
+		rotated.rotate_x(vec.x);
+		rotated.rotate_y(vec.y);
+		rotated.rotate_z(vec.z);
 		rotated
 	}
 
-	pub fn get_z_axis(x: f64, y: f64, z: f64) -> Vector3d {
+	pub fn get_z_axis(vec: &Vector3d) -> Vector3d {
 		let mut rotated = Vector3d::new(0.0, 0.0, 1.0);
-		rotated.rotate_x(x);
-		rotated.rotate_y(y);
-		rotated.rotate_z(z);
+		rotated.rotate_x(vec.x);
+		rotated.rotate_y(vec.y);
+		rotated.rotate_z(vec.z);
 		rotated
 	}
 
-	// pub fn dot(&mut self, vec: Vector3d) -> f64 {
-	// 	return self.x * vec.x + self.y * vec.y + self.z * vec.z; 
-	// }
-	pub fn dot(&mut self, x: f64, y: f64, z: f64) -> f64 {
-		return self.x * x + self.y * y + self.z * z; 
+	pub fn dot(&mut self, vec: &Vector3d) -> f64 {
+		return self.x * vec.x + self.y * vec.y + self.z * vec.z; 
 	}
 
-	// pub fn cross(vec1: Vector3d, vec2: Vector3d) -> Vector3d {
-	// 	return Vector3d::new( 
-	// 		vec1.y * vec2.z - vec1.z * vec2.y,
-	// 		vec1.z * vec2.x - vec1.x * vec2.z,
-	// 		vec1.x * vec2.y - vec1.y * vec2.x
-	// 	);
-	// }
-	pub fn cross(&mut self, x: f64, y: f64, z: f64) -> Vector3d {
+	pub fn cross(&mut self, vec:  &Vector3d) -> Vector3d {
 		return Vector3d::new( 
-			self.y * z - self.z * y,
-			self.z * x - self.x * z,
-			self.x * y - self.y * x
+			self.y * vec.z - self.z * vec.y,
+			self.z * vec.x - self.x * vec.z,
+			self.x * vec.y - self.y * vec.x
 		);
 	}
 
@@ -134,33 +125,27 @@ impl Vector3d {
 		self.z = normed.z * length;
 	}
 
-	// pub fn project_on_vector(vec1: Vector3d, vec2: Vector3d) -> Vector3d {
-	// 	let mut normed = Vector3d::new(vec2.x, vec2.y, vec2.z).normalize();
-	// 	normed.set_length(Vector3d::dot(vec1, vec2));
-	// 	normed
-	// }
-
-	pub fn copy(&mut self, vec: Vector3d) {
+	pub fn copy(&mut self, vec: &Vector3d) {
 		self.x = vec.x;
 		self.y = vec.y;
 		self.z = vec.z;
 	}
 
-	pub fn rotate_on_axis(&mut self, axis_x: f64, axis_y: f64, axis_z: f64, angle: f64) {
+	pub fn rotate_on_axis(&mut self, axis: &Vector3d, angle: f64) {
 
-		let mut projection = Vector3d::new(axis_x, axis_y, axis_z);
-		let dot = self.dot(axis_x, axis_y, axis_z);
+		let mut projection = Vector3d::new(axis.x, axis.y, axis.z);
+		let dot = self.dot(&axis);// axis.x, axis.y, axis.z);
 		projection.set_length(dot);
 
 		let mut diff = Vector3d::new(self.x - projection.x, self.y - projection.y, self.z - projection.z);
-		let mut green = self.cross(axis_x, axis_y, axis_z).normalize();
-		let cross = green.cross(axis_x, axis_y, axis_z);
-		self.set(cross.x, cross.y, cross.z);
+		let mut green = self.cross(&axis).normalize();
+		let cross = green.cross(&axis);
+		self.copy(&cross);
 		
 		green.set_length(diff.get_length() * angle.sin());
 		self.set_length(diff.get_length() * angle.cos());
-		self.add(green.x, green.y, green.z);
-		self.add(projection.x, projection.y, projection.z);
+		self.add(&green);
+		self.add(&projection);
 	}
 
 	pub fn rotate_x(&mut self, angle: f64) {
