@@ -155,11 +155,10 @@ impl Game {
             
             let faces = &mut ob.geometry.faces;
             for face in faces {
+                
                 let a = &ob.geometry.vertices[face.a];
                 let b = &ob.geometry.vertices[face.b];
                 let c = &ob.geometry.vertices[face.c];
-
-                
 
                 let mut p1 = Vector3d::new(a.x, a.y, a.z);
                 let mut p2 = Vector3d::new(b.x, b.y, b.z);
@@ -168,8 +167,6 @@ impl Game {
                 let x_axis = Vector3d::get_x_axis(&ob.rotation);
                 let y_axis = Vector3d::get_y_axis(&ob.rotation);
                 let z_axis = Vector3d::get_z_axis(&ob.rotation);
-
-                println!("==== {} {} {}", y_axis.x, y_axis.y, y_axis.z);
 
                 p1.rotate_on_axis(&x_axis, ob.rotation.x);
                 p1.rotate_on_axis(&y_axis, ob.rotation.y);
