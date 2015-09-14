@@ -198,6 +198,8 @@ impl Game {
                 drawer.draw_line(
                     Point::new(pixel_3.x as i32, pixel_3.y as i32), 
                     Point::new(pixel_2.x as i32, pixel_2.y as i32));
+
+                // Face stuff
                 // let mut top = Vector2d::new(0.0,0.0);
                 // let mut mid = Vector2d::new(0.0,0.0);
                 // let mut bot = Vector2d::new(0.0,0.0);

@@ -1,7 +1,7 @@
 extern crate sdl2;
-extern crate pwong;
+extern crate rustd;
 
-use pwong::entities::game::Game;
+use rustd::entities::game::Game;
 
 static INITIAL_HEIGHT : i32 = 800;
 static INITIAL_WIDTH : i32 = 1200;
