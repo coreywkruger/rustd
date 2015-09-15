@@ -5,7 +5,7 @@ use super::keymap::KeyPressMap;
 use super::screen::Screen;
 use super::camera::Camera;
 use super::vector3d::Vector3d;
-// use super::vector2d::Vector2d;
+use super::vector2d::Vector2d;
 use super::mesh::Mesh;
 use super::geometry::Geometry;
 use super::scene::Scene;
@@ -16,7 +16,7 @@ use self::sdl2::sdl::Sdl;
 use self::sdl2::keycode::KeyCode;
 use self::sdl2::event::{Event, EventPump, WindowEventId};
 use self::sdl2::video::{Window, WindowPos, RESIZABLE};
-use self::sdl2::render::{RenderDriverIndex, SOFTWARE, Renderer};
+use self::sdl2::render::{RenderDriverIndex, ACCELERATED, Renderer};
 use self::sdl2::pixels::Color;
 
 use std::thread;
@@ -47,9 +47,9 @@ impl Game {
         cube2.position.set_z(39.0);
         cube2.position.set_x(11.0);
 
-        // let mut twisty = Importer::import_obj("./twisty_torus.obj");
-        // twisty.scale.set(0.5, 0.5, 0.5);
-        // twisty.position.set_z(100.0);
+        let mut twisty = Importer::import_obj("./twisty_torus.obj");
+        twisty.scale.set(0.5, 0.5, 0.5);
+        twisty.position.set_z(3.0);
         // let mut plane = Mesh::new(Geometry::new_plane_geometry(10, 16.0));
         // plane.rotation.set_x(consts::PI / 2.0);
         // plane.position.set_z(50.0);
@@ -60,8 +60,8 @@ impl Game {
         // cube.position.set_y(6.0);
         let mut scene = Scene::new();
         
-        // scene.add_object(twisty);
-        scene.add_object(cube);
+        scene.add_object(twisty);
+        // scene.add_object(cube);
         // scene.add_object(cube2);
         // scene.add_object(plane);
 
@@ -88,7 +88,7 @@ impl Game {
             Ok(window) => window,
             Err(err) => panic!("failed to create window: {}", err)
         };
-        let mut renderer = match Renderer::from_window(window, RenderDriverIndex::Auto, SOFTWARE) {
+        let mut renderer = match Renderer::from_window(window, RenderDriverIndex::Auto, ACCELERATED) {
             Ok(renderer) => renderer,
             Err(err) => panic!("failed to create renderer: {}", err)
         };
@@ -311,24 +311,23 @@ impl Game {
                 
 
                 // for y in 0..((top.y - bot.y) as i32) {
-                    // for x in 0..((right - left) as i32) {
+                //     for x in 0..((right - left) as i32) {
 
-                        // let pt = Vector2d::new((left) + (x as f64), top.y + (y as f64));
+                //         let pt = Vector2d::new((left) + (x as f64), top.y + (y as f64));
 
-                        // let s1 = Vector2d::sign(&pt, pixel_1, pixel_2);
-                        // let s2 = Vector2d::sign(&pt, pixel_2, pixel_3);
-                        // let s3 = Vector2d::sign(&pt, pixel_3, pixel_1);
+                //         let s1 = Vector2d::sign(&pt, &pixel_1, &pixel_2);
+                //         let s2 = Vector2d::sign(&pt, &pixel_2, &pixel_3);
+                //         let s3 = Vector2d::sign(&pt, &pixel_3, &pixel_1);
 
-                        // let b1 = s1 < 0.0;
-                        // let b2 = s2 < 0.0;
-                        // let b3 = s3 < 0.0;
+                //         let b1 = s1 < 0.0;
+                //         let b2 = s2 < 0.0;
+                //         let b3 = s3 < 0.0;
 
-                        // if (b1 == b2) && (b2 == b3) {
-                        //     drawer.draw_point(Point::new(pt.x as i32, pt.y as i32))
-                        // }
-
-                        // drawer.draw_points(&points[..]);
-                    // }
+                //         if (b1 == b2) && (b2 == b3) {
+                //             drawer.draw_point(Point::new(pt.x as i32, pt.y as i32));
+                //             drawer.draw_point(Point::new(pt.x as i32, pt.y as i32));
+                //         }
+                //     }
                 // }
 
                 // drawer.draw_line(
